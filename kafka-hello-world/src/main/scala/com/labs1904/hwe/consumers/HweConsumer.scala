@@ -12,15 +12,15 @@ import java.time.Duration
 import java.util.{Arrays, Properties, UUID}
 
 object HweConsumer {
-  val BootstrapServer : String = "CHANGEME"
-  val consumerTopic: String = "question-1"
+  val BootstrapServer : String = "CHANGE_ME"
+  val consumerTopic: String = "question-1-updated"
   val producerTopic: String = "question-1-output"
-  val username: String = "CHANGEME"
-  val password: String = "CHANGEME"
-  //Use this for Windows
-  val trustStore: String = "src\\main\\resources\\kafka.client.truststore.jks"
-  //Use this for Mac
-  //val trustStore: String = "src/main/resources/kafka.client.truststore.jks"
+  val username: String = "CHANGE_ME"
+  val password: String = "CHANGE_ME"
+  val trustStore: String = "CHANGE_ME"
+  case class RawUser(id: String, username: String, name: String, sex: String, email: String, birthday: String)
+  case class EnrichedUser(id: String, username: String, name: String, sex: String, email: String, birthday: String, numberAsWord: String, hweDeveloper: String = "Brandon Chapple")
+
 
   implicit val formats: DefaultFormats.type = DefaultFormats
 
@@ -48,7 +48,15 @@ object HweConsumer {
         // Retrieve the message from each record
         val message = record.value()
         println(s"Message Received: $message")
-        // TODO: Add business logic here!
+        val split = message.split("\t").map(_.trim)
+        var rawUser = RawUser(split(0), split(1), split(2), split(3), split(4), split(5))
+        val idAsInt = Integer.parseInt(rawUser.id) % 100
+        var enrichedUser = EnrichedUser(split(0), split(1), split(2), split(3), split(4), split(5), Integer.toString(idAsInt))
+
+
+        val userCSV = enrichedUser.id + "," + enrichedUser.username + "," + enrichedUser.name + "," + enrichedUser.sex + "," + enrichedUser.email + "," + enrichedUser.birthday + "," + enrichedUser.numberAsWord + "," + enrichedUser.hweDeveloper
+        val producerRecord = new ProducerRecord[String, String](producerTopic, "Enriched User: ", userCSV)
+        producer.send(producerRecord)
 
       })
     }
