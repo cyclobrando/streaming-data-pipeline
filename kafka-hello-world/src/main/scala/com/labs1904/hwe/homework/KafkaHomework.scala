@@ -14,8 +14,8 @@ object KafkaHomework {
    */
 
     //TODO: If these are given in class, change them so that you can run a test. If not, don't worry about this step
-  val BootstrapServer = "change-me"
-  val Topic: String = "change-me"
+  val BootstrapServer = "CHANGEME"
+  val Topic: String = "CHANGEME"
 
   implicit val formats: DefaultFormats.type = DefaultFormats
 
@@ -24,23 +24,29 @@ object KafkaHomework {
     // Create the KafkaConsumer
     //TODO: Write in a comment what these lines are doing. What are the properties necessary to instantiate a consumer?
     val properties = getProperties(BootstrapServer)
+    // this line is instantiating properties, which calls the function getProperties, which takes in the location of our cluster and attaches properties to it.
     val consumer: KafkaConsumer[String, String] = new KafkaConsumer[String, String](properties)
+    //this line is instantiating a new KafkaConsumer and passing it the properties received from getProperties
+    //The properties needed seem to be the name of the server, the key and value deserializers, and the group ID
 
 
     //TODO: What does this line mean? Write your answer in a comment below
     consumer.subscribe(Arrays.asList(Topic))
+    //the consumer is now subscribing to the topic defined above
 
     while (true) {
       // TODO: Change this to be every 5 seconds
-      val duration: Duration = Duration.ofMillis(100)
+      val duration: Duration = Duration.ofMillis(500)
 
       //TODO: Look up the ConsumerRecords class below, in your own words what is the class designed to do?
       val records: ConsumerRecords[String, String] = consumer.poll(duration)
+      // class will poll for data for the amount of time set above
 
       records.forEach((record: ConsumerRecord[String, String]) => {
         // Retrieve the message from each record
         //TODO: Describe why we need the .value() at the end of record
         val message = record.value()
+        //Because the record contains numerous other key/value pairs. We're only interested in the record's message
 
         //TODO: If you were given the values for the bootstrap servers in class, run the app with the green play button and make sure it runs successfully. You should see message(s) printing out to the screen
         println(s"Message Received: $message")

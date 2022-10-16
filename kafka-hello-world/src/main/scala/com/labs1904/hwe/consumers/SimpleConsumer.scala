@@ -9,14 +9,12 @@ import java.time.Duration
 import java.util.{Arrays, Properties, UUID}
 
 object SimpleConsumer {
-  val BootstrapServer : String = "CHANGEME"
-  val Topic: String = "question-1"
-  val username: String = "CHANGEME"
-  val password: String = "CHANGEME"
+  val BootstrapServer : String = "CHANGE_ME"
+  val Topic: String = "question-1-output"
+  val username: String = "CHANGE_ME"
+  val password: String = "CHANGE_ME"
   //Use this for Windows
-  val trustStore: String = "src\\main\\resources\\kafka.client.truststore.jks"
-  //Use this for Mac
-  //val trustStore: String = "src/main/resources/kafka.client.truststore.jks"
+  val trustStore: String = "CHANGE_ME"
 
   implicit val formats: DefaultFormats.type = DefaultFormats
 
@@ -35,6 +33,8 @@ object SimpleConsumer {
       // poll for new data
       val duration: Duration = Duration.ofMillis(100)
       val records: ConsumerRecords[String, String] = consumer.poll(duration)
+
+
 
       records.forEach((record: ConsumerRecord[String, String]) => {
         // Retrieve the message from each record

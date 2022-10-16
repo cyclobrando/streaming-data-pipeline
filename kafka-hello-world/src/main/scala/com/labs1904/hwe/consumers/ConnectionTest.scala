@@ -10,14 +10,13 @@ import java.util.{Arrays, Properties, UUID}
 
 object ConnectionTest {
   // TODO: this is configured to use kafka running locally, change it to your cluster
-  val BootstrapServer : String = "CHANGEME"
-  val Topic: String = "hwe-kafka-connection-test"
-  val username: String = "CHANGEME"
-  val password: String = "CHANGEME"
+  val BootstrapServer : String = "CHANGE_ME"
+  val Topic: String = "connection-test"
+  val username: String = "CHANGE_ME"
+  val password: String = "CHANGE_ME"
   //Use this for Windows
-  val trustStore: String = "src\\main\\resources\\kafka.client.truststore.jks"
-  //Use this for Mac
-  //val trustStore: String = "src/main/resources/kafka.client.truststore.jks"
+  val trustStore: String = "CHANGE_ME"
+
 
   implicit val formats: DefaultFormats.type = DefaultFormats
 
@@ -35,6 +34,8 @@ object ConnectionTest {
       // poll for new data
       val duration: Duration = Duration.ofMillis(100)
       val records: ConsumerRecords[String, String] = consumer.poll(duration)
+
+
 
       records.forEach((record: ConsumerRecord[String, String]) => {
         // Retrieve the message from each record
